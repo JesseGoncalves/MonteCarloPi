@@ -26,7 +26,7 @@ int main()
 	}
 
 	// estimate area of quarter circle
-	double qcircA = results / nTrials;	// qcircA = 0 even when results != 0 for some reason
+	double qcircA = (double)results / (double)nTrials;
 
 	// calculate and display estimation of pi
 	double mcPi = qcircA * 4;
