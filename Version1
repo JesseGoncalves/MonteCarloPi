@@ -14,7 +14,7 @@ int main()
 	int nTrials;
 	cin >> nTrials;
 		
-	// generate and classify random numbers
+	// generate and classify random points
 	int results = 0;
 	for (int i = 0; i != nTrials; ++i) {
 		double x = rand() / (double)RAND_MAX;
