@@ -10,30 +10,29 @@ using namespace std;
 
 int main()
 {
-	// gets user input for number of trials
-	cout << "Enter number of trials: " << endl;
-	int nTrials;
-	cin >> nTrials;
+  // gets user input for number of trials
+  cout << "Enter number of trials: " << endl;
+  int nTrials; // number of trials
+  cin >> nTrials;
 		
-	// generate and classify random points
-	int results = 0;
-	for (int i = 0; i != nTrials; ++i) {
-		double x = rand() / (double)RAND_MAX;
-		double y = rand() / (double)RAND_MAX;
-		double distance = sqrt(pow(x, 2) + pow(y, 2));
-		if (distance <= 1) {
-			++results;
-		}
-	}
+  // generate and classify random points
+  int results = 0; // number of hits in circle
+  for (int i = 0; i != nTrials; ++i) {
+    double x = rand() / (double)RAND_MAX; // x coord
+    double y = rand() / (double)RAND_MAX; // y coord
+    double distance = sqrt(pow(x, 2) + pow(y, 2)); // distance from origin
+    if (distance <= 1) {
+      ++results;
+    }
+  }
+  // estimate area of quarter circle
+  double quarterCircleArea = (double)results / (double)nTrials;
 
-	// estimate area of quarter circle
-	double qcircA = (double)results / (double)nTrials;
+  // calculate and display estimation of pi
+  double piEstimate = quarterCircleArea * 4;
+  cout << "Estimate of pi = " << piEstimate << endl;
 
-	// calculate and display estimation of pi
-	double mcPi = qcircA * 4;
-	cout << "Estimate of pi = " << mcPi << endl;
-
-	return 0;
+  return 0;
 }
 	
 	
