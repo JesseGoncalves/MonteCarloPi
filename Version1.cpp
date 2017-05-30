@@ -16,7 +16,7 @@ int main()
 
   for (nTrials = 10; nTrials < 1000001; nTrials *= 10) {  // increment number of trials
 	  
-    double variance = 0; // variance of estimates for each number of trials
+    vector<double> estimates; // vector of estimates of pi
 	  
     for (int j = 0; j < 10; ++j) {  // repeat 10 times
 
@@ -37,10 +37,20 @@ int main()
       // calculate estimation of pi
       double piEstimate = quarterCircleArea * 4;
     
-      // calculate variance
-      variance += pow(piEstimate, 2) / 10;
+      // create vector of estimates
+      estimates.push_back(piEstimate);
     }
     
+    // calculate mean and variance
+    double mean = 0;  // mean of estimates
+    for (int a = 0; a < 10; ++a) {
+      mean += estimates[a] / 10;
+    }
+    double variance = 0;  // variance of estimates
+    for (int b = 0; b < 10; ++b) {
+      variance += pow(estimates[b] - mean, 2) / 10;
+    }
+	  
     // calculate and display standard deviation
     double standardDev = pow(variance, .5);
     cout << "For " << nTrials << " trials the standard deviation is " << standardDev << endl;
