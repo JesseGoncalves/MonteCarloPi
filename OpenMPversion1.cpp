@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-  int nthreads;
+  int nThreads;
 
   // gets user input for number of trials
   cout << "Enter number of trials: " << endl;
@@ -23,13 +23,13 @@ int main()
   double x; // x coord
   double y; // y coord
   double distance; // distance from center of circle
-#pragma omp parallel for private(x,y,distance,nthreads) shared(results)
+  #pragma omp parallel for private(x,y,distance,nthreads) shared(results)
   for (int i = 0; i < nTrials; ++i) {
-
+  
     // print number of threads
-    nthreads = omp_get_num_threads();
-    cout << "number of threads: " << nthreads << endl;
-
+    nThreads = omp_get_num_threads();
+    cout << "number of threads: " << nThreads << endl;
+    
     x = rand() / (double)RAND_MAX;
     y = rand() / (double)RAND_MAX;
     distance = sqrt(pow(x, 2) + pow(y, 2));
@@ -39,11 +39,11 @@ int main()
   }
 
   // estimate area of quarter circle
-  double qcircA = (double)results / (double)nTrials;
+  double quarterCircleArea = (double)results / (double)nTrials;
 
   // calculate and display estimation of pi
-  double mcPi = qcircA * 4;
-  cout << "Estimate of pi = " << mcPi << endl;
+  double piEstimate = quarterCircleArea * 4;
+  cout << "Estimate of pi = " << piEstimate << endl;
 
   return 0;
 }
