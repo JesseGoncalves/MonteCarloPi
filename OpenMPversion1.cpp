@@ -21,8 +21,9 @@ int main()
   double x; // x coord
   double y; // y coord
   double distance; // distance from center of circle
+  
   #pragma omp parallel for private(x,y,distance) shared(results)
-  for (int i = 0; i < nTrials; ++i) {
+  for (int i = 0; i < nTrials; ++i) {  // loop runs in parallel
     x = rand() / (double)RAND_MAX;
     y = rand() / (double)RAND_MAX;
     distance = sqrt(pow(x, 2) + pow(y, 2));
