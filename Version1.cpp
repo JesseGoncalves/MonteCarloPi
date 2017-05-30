@@ -13,7 +13,11 @@ using namespace std;
 int main()
 {
   int nTrials; // number of trials
+
   for (nTrials = 10; nTrials < 1000001; nTrials *= 10) {  // increment number of trials
+	  
+    double variance = 0; // variance of estimates for each number of trials
+	  
     for (int j = 0; j < 10; ++j) {  // repeat 10 times
 
       // generate and classify random points
@@ -34,7 +38,6 @@ int main()
       double piEstimate = quarterCircleArea * 4;
     
       // calculate variance
-      double variance = 0;
       variance += pow(piEstimate, 2) / 10;
     }
     
