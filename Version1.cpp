@@ -35,11 +35,11 @@ int main()
     
       // calculate variance
       double variance = 0;
-      variance += piEstimate**2 / 10;
+      variance += pow(piEstimate, 2) / 10;
     }
     
     // calculate and display standard deviation
-    double standardDev = variance**.5;
+    double standardDev = pow(variance, .5);
     cout << "For " << nTrials << " trials the standard deviation is " << standardDev << endl;
   }
 
