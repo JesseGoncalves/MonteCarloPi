@@ -21,7 +21,7 @@ int main()
   double x; // x coord
   double y; // y coord
   double distance; // distance from center of circle
-  #pragma omp parallel for private(x,y,distance,nthreads) shared(results)
+  #pragma omp parallel for private(x,y,distance) shared(results)
   for (int i = 0; i < nTrials; ++i) {
     x = rand() / (double)RAND_MAX;
     y = rand() / (double)RAND_MAX;
