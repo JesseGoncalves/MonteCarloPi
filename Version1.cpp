@@ -18,8 +18,8 @@ int main()
   // generate and classify random points
   int results = 0; // number of hits in circle
   for (int i = 0; i != nTrials; ++i) {
-    double x = rand() / (double)RAND_MAX; // x coord
-    double y = rand() / (double)RAND_MAX; // y coord
+    double x = (double)rand() / (double)RAND_MAX; // x coord
+    double y = (double)rand() / (double)RAND_MAX; // y coord
     double distance = sqrt(pow(x, 2) + pow(y, 2)); // distance from origin
     if (distance <= 1) {
       ++results;
