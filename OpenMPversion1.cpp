@@ -11,8 +11,6 @@ using namespace std;
 
 int main()
 {
-  int nThreads;
-
   // gets user input for number of trials
   cout << "Enter number of trials: " << endl;
   int nTrials; // total number of trials
@@ -25,11 +23,6 @@ int main()
   double distance; // distance from center of circle
   #pragma omp parallel for private(x,y,distance,nthreads) shared(results)
   for (int i = 0; i < nTrials; ++i) {
-  
-    // print number of threads
-    nThreads = omp_get_num_threads();
-    cout << "number of threads: " << nThreads << endl;
-    
     x = rand() / (double)RAND_MAX;
     y = rand() / (double)RAND_MAX;
     distance = sqrt(pow(x, 2) + pow(y, 2));
