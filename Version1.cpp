@@ -3,7 +3,7 @@
 // inside a quarter of a circle of radius 1
 // then multiplies result by 4 to estimate pi
 // test precision by running code 10 times for 10^n trials,
-// for n={1,2,3,4,5,6}, and calculating standard deviations
+// where n={1,2,3,4,5,6}, and calculating standard deviations
 #include<cstdlib>
 #include<cmath>
 #include<iostream>
