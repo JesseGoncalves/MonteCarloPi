@@ -4,12 +4,6 @@
 // then multiplies result by 4 to estimate pi
 #include<cstdlib>
 #include<cmath>
-// estimate pi using monte carlo methods, parallelized w/ OpenMP
-// calculates probability of random point 0 <= x,y < 1 being
-// inside a quarter of a circle of radius 1
-// then multiplies result by 4 to estimate pi
-#include<cstdlib>
-#include<cmath>
 #include<iostream>
 #include<omp.h>
 
