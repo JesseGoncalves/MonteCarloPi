@@ -6,6 +6,8 @@
 #include<cmath>
 #include<iostream>
 #include<omp.h>
+#include<vector>
+#include<time.h>
 
 using namespace std;
 
@@ -16,17 +18,25 @@ int main()
   int nTrials; // total number of trials
   cin >> nTrials;
 
-  // generate and classify random points in parallel
+  // gets user input for number of threads
+  cout << "Enter number of threads: " << endl;
+  int numThreads; // number of threads in parallel loop
+  cin >> numThreads;
+
+  // generate vector of random points
+  srand(time(0)); // set seed for random number generator
+  vector<double> randomVec;
+  for (int i = 0; i < nTrials * 2; ++i) {  // loop runs in parallel
+    double randNum = rand() / (double)RAND_MAX;
+    randomVec.push_back(randNum);
+  }
+
   int results = 0; // hits inside circle
-  double x; // x coord
-  double y; // y coord
   double distance; // distance from center of circle
   
-  #pragma omp parallel for private(x,y,distance) shared(results)
-  for (int i = 0; i < nTrials; ++i) {  // loop runs in parallel
-    x = rand() / (double)RAND_MAX;
-    y = rand() / (double)RAND_MAX;
-    distance = sqrt(pow(x, 2) + pow(y, 2));
+  #pragma omp parallel for private(distance) reduction(+:results) num_threads(numThreads)
+  for (int j = 0; j < nTrials*2 - 1; j += 2) {
+  distance = sqrt(pow(randomVec[j], 2) + pow(randomVec[j+1], 2));
     if (distance <= 1) {
       ++results;
     }
