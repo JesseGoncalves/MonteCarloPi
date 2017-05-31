@@ -2,10 +2,10 @@
 // calculates probability of random point 0 <= x,y < 1 being
 // inside a quarter of a circle of radius 1
 // then multiplies result by 4 to estimate pi
-#include<cstdlib>
-#include<cmath>
-#include<iostream>
-
+#include <cstdlib>
+#include <cmath>
+#include <iostream>
+#include <time.h>
 using namespace std;
 
 int main()
@@ -14,7 +14,10 @@ int main()
   cout << "Enter number of trials: " << endl;
   int nTrials; // number of trials
   cin >> nTrials;
-		
+
+  // set seed for random number generator
+  srand(time(0));
+
   // generate and classify random points
   int results = 0; // number of hits in circle
   for (int i = 0; i != nTrials; ++i) {
