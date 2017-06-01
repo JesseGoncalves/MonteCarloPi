@@ -52,7 +52,7 @@ int main()
     double mean = 0;  // mean of estimates
     for (int a = 0; a < numThreads; ++a) {
       mean += estimateVec[a] / numThreads;
-      cout << estimateVec[a] << endl;
+      cout << estimateVec[a] << endl;  // shows that false sharing is occurring because some values are 0
     }
     double variance = 0;  // variance of estimates
     for (int b = 0; b < numThreads; ++b) {
