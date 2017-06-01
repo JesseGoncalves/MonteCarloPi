@@ -57,6 +57,7 @@ int main()
     double variance = 0;  // variance of estimates
     for (int b = 0; b < numThreads; ++b) {
       variance += pow(estimateVec[b] - mean, 2) / (numThreads - 1);
+
     }
     double standardDev = sqrt(variance);  // standard deviation of estimates
     cout << "For " << numTrials << " trials the mean estimate is " << mean
