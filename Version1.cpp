@@ -2,38 +2,42 @@
 // calculates probability of random point 0 <= x,y < 1 being
 // inside a quarter of a circle of radius 1
 // then multiplies result by 4 to estimate pi
+// test precision by running code 10 times for 10^n trials,
+// where n={1,2,3,4,5,6}, and calculating standard deviations
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include "vectorStandardDev.h"
+#include "monteCarloPi.h"
 #include <time.h>
+
 using namespace std;
 
 int main()
 {
-  // gets user input for number of trials
-  cout << "Enter number of trials: " << endl;
   int nTrials; // number of trials
-  cin >> nTrials;
+  srand(time(0)); // initialize seed for random number generator
 
-  // set seed for random number generator
-  srand(time(0));
+  for (nTrials = 10; nTrials < 100000001; nTrials *= 10) {  // increment number of trials
+	  
+    vector<double> estimates; // vector of estimates of pi
+	  
+    for (int j = 0; j < 10; ++j) {  // repeat 10 times
 
-  // generate and classify random points
-  int results = 0; // number of hits in circle
-  for (int i = 0; i != nTrials; ++i) {
-    double x = (double)rand() / (double)RAND_MAX; // x coord
-    double y = (double)rand() / (double)RAND_MAX; // y coord
-    double distance = sqrt(pow(x, 2) + pow(y, 2)); // distance from origin
-    if (distance <= 1) {
-      ++results;
+      // estimate value of pi
+      double piEstimate;
+      piEstimate = monteCarloPi(nTrials);
+    
+      // create vector of estimates
+      estimates.push_back(piEstimate);
     }
-  }
-  // estimate area of quarter circle
-  double quarterCircleArea = (double)results / (double)nTrials;
 
-  // calculate and display estimation of pi
-  double piEstimate = quarterCircleArea * 4;
-  cout << "Estimate of pi = " << piEstimate << endl;
+    // calculate and display standard deviation
+    double standardDev;
+    standardDev = vectorStandardDev(estimates);
+    cout << "For " << nTrials << " trials the standard deviation is " << standardDev << endl;
+  }
 
   return 0;
 }
