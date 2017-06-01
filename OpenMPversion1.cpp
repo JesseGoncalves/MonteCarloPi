@@ -26,7 +26,7 @@ int main()
   // generate vector of random points
   srand(time(0)); // set seed for random number generator
   vector<double> randomVec;
-  for (int i = 0; i < nTrials * 2; ++i) {  // loop runs in parallel
+  for (int i = 0; i < nTrials * 2; ++i) {
     double randNum = rand() / (double)RAND_MAX;
     randomVec.push_back(randNum);
   }
