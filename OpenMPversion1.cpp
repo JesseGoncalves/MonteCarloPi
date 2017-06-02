@@ -20,7 +20,7 @@ int main()
   srand(time(0));  // initialize seed for random number generator
   double randomX;  // random x coordinates
   double randomY;  // random y coordinates
-  for (numTrials = 10; numTrials < 1000000001; numTrials *= 10) {  // increment number of trials
+  for (numTrials = 10; numTrials < 100000001; numTrials *= 10) {  // increment number of trials
     vector<double> randomVecX;  // empty vector to hold randomly generated x coordinates
     vector<double> randomVecY;  // empty vector to hold randomly generated y coordinates
     for (int i  = 0; i < numTrials * numThreads; ++i) {
@@ -29,12 +29,11 @@ int main()
       randomY = rand() / (double)RAND_MAX;  // generate random y coordinate
       randomVecY.push_back(randomY);  // add random y coordinate to vector
     }
-    double results;  // number of hits inside quarter circle
+    int results;  // number of hits inside quarter circle
     double distance;  // distance from origin to point
     double quarterCircleArea;  // approximated with probability of being inside circle
     double piEstimate;  // estimate of pi
-    vector<double> estimateVec(numThreads, 0);  // vector of zeros to hold estimates of pi
-    vector<double>::iterator iter = estimateVec.begin();  // iterator for entries in estimateList
+    vector<double> estimateVec(numThreads, 0);  // vector of zeros to hold estimates of pi 
     #pragma omp parallel for private(results,distance,quarterCircleArea,piEstimate) num_threads(numThreads)
     for (int j = 0; j < numThreads; ++j) {  // run one simulation on each thread
       results = 0;
@@ -46,13 +45,11 @@ int main()
       }
       quarterCircleArea = (double)results / numTrials;
       piEstimate = quarterCircleArea * 4;
-      *iter = piEstimate;  // save estimate to estimateVec
-      ++iter;
+      estimateVec[omp_get_thread_num()] = piEstimate;  // save estimate to estimateVec
     }
     double mean = 0;  // mean of estimates
     for (int a = 0; a < numThreads; ++a) {
       mean += estimateVec[a] / numThreads;
-      cout << estimateVec[a] << endl;  // shows that false sharing is occurring because some values are 0
     }
     double variance = 0;  // variance of estimates
     for (int b = 0; b < numThreads; ++b) {
