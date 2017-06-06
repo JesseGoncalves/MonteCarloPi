@@ -23,7 +23,7 @@ int main()
   int insideCircle;  // number of hits inside quarter circle
   double quarterCircleArea;  // approximated with probability of being inside circle
   double piEstimate;  // estimate of pi
-  int i; int j;  // for loop countersi
+  int i; int j;  // for loop counters
   unsigned int seed;  // seed for random number generator
   for (numTrials = 10; numTrials < 100000001; numTrials *= 10) {  // increment number of trials
     vector<double> estimateVec(numThreads, 0);  // vector of zeros to hold estimates of pi
