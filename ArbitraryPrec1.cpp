@@ -1,4 +1,5 @@
 // estimate value of pi to arbitrary precision using monte carlo methods
+// compile with: g++ ArbitraryPrec1.cpp -o ap1 -I/path/to/gmp-6.1.2 -L/path/to/gmp-6.1.2 -lgmpxx -lgmp
 #include <iostream>
 #include <cstdlib>
 #include <cmath>

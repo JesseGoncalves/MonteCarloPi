@@ -1,5 +1,6 @@
 // estimate value of pi to arbitrary precision using monte carlo methods
 // parallelized with OpenMP
+// compile with: g++ OMParbitraryPrec1.cpp -o OMPap1 -I/path/to/gmp-6.1.2 -L/path/to/gmp-6.1.2 -lgmpxx -lgmp -fopenmp
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
