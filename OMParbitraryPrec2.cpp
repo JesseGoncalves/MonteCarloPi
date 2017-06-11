@@ -1,6 +1,6 @@
 // estimate value of pi to arbitrary precision using monte carlo methods
-// parallelized with OpenMP
-// compile with: g++ OMParbitraryPrec2.cpp -o OMPap2 -I/path/to/gmp-6.1.2 -L/path/to/gmp-6.1.2 -lgmpxx -lgmp -fopenmp
+// parallelized with OpenMP, arbitrary precision library GMP
+// compile with: g++ OMParbitraryPrec2.cpp -o OMPap2 -I/path/to/gmp-6.1.2 -L/path/to/lib_w/_lgmp_lgmpxx -lgmpxx -lgmp -fopenmp
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
@@ -16,7 +16,7 @@ int main()
   mpf_set_default_prec(128);  // set precision for estimate
   mpf_t numTrialsMP; // multiple precision float type for number of trials
   mpf_init(numTrialsMP);
-  mpf_set_ui(numTrialsMP, 100000000 * numThreads);  // set number of trials
+  mpf_set_ui(numTrialsMP, 10000000 * numThreads);  // set number of trials
   unsigned long long numTrials = mpf_get_ui(numTrialsMP) / numThreads;  // long long type for number of trials
   double x,y;  // random x and y coordinates to be generated
   unsigned long long numHits = 0;  // number of points inside of quarter circle
