@@ -3,7 +3,7 @@
 // calculates probability of random point 0 <= x,y < 1 being
 // inside a quarter of a circle of radius 1
 // then multiplies result by 4 to estimate pi
-// compile with: g++ OMPstrongScale.cpp -o ompStrong -fopenmp -std=c++11
+// compile with: g++ OMPstrongScale.cpp -o ompStrong -fopenmp -openmp-libcompat -std=c++11
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
@@ -23,7 +23,9 @@ int main()
   double y;  // random y coordinates
   unsigned long long numHits = 0;  // number of hits inside quarter circle
   unsigned long long i;  // for loop counter
-  #pragma omp parallel for num_threads(numThreads) private(x,y) reduction(+:numHits)
+  //GOMP_AFFINITY = 0:numThreads;  // assigns threads to specific processors
+  #pragma omp parallel proc_bind(close) num_threads(numThreads)
+  #pragma omp for private(x,y) reduction(+:numHits)
   for (i = 0; i < numTrials; ++i) {
     x = rand_r(&seed) / (double)RAND_MAX;  // generate random x coordinate
     y = rand_r(&seed) / (double)RAND_MAX;  // generate random y coordinate
@@ -34,7 +36,8 @@ int main()
   double piEstimate = numHits / (double)numTrials * 4;  // calculates estimate of pi
   auto end = std::chrono::steady_clock::now();  // get time at end of execution
   std::chrono::duration<double> execTime = end - start;  // calculate execution time
-  std::cout << piEstimate << std::endl << execTime.count() << std::endl << numThreads << std::endl;
+  std::ofstream resultFile("OMPstrongScaling.csv", std::ios::out | std::ios::app);
+  resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << execTime.count() << std::endl;
   }
   return 0;
 }
