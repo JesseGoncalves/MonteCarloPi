@@ -1,0 +1,6 @@
+#!/bin/bash
+
+OMP_PROC_BIND=true
+
+./ompStrong
+./ompWeak
