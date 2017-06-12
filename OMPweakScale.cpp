@@ -14,41 +14,42 @@
 
 int main()
 {
-  auto start = std::chrono::steady_clock::now();  // gets time at beginning of program
-  int numThreads = 16;  // number of threads for parallel section
-  int threadNum;  // number for each thread
-  unsigned long long numTrials = 100000000;  // number of trials
-  double randomX;  // random x coordinates
-  double randomY;  // random y coordinates
-  unsigned long long insideCircle;  // number of hits inside quarter circle
-  double quarterCircleArea;  // approximated with probability of being inside circle
-  double piEstimate;  // estimate of pi
-  int i; int j;  // for loop counters
-  unsigned int seed;  // seed for random number generator
-  std::vector<double> estimateVec(numThreads, 0);  // vector of zeros to hold estimates of pi
-  #pragma omp parallel for num_threads(numThreads) private(i,j,threadNum,seed,randomX,randomY,insideCircle,quarterCircleArea,piEstimate)
+  for (int k = 1; k < 17; ++k) {
+    auto start = std::chrono::steady_clock::now();  // gets time at beginning of program
+    int numThreads = k;  // number of threads for parallel section
+    int threadNum;  // number for each thread
+    unsigned long long numTrials = 1000000000;  // number of trials
+    double x;  // random x coordinates
+    double y;  // random y coordinates
+    unsigned long long numHits;  // number of hits inside quarter circle
+    double piEstimate;  // estimate of pi
+    int i; int j;  // for loop counters
+    unsigned int seed;  // seed for random number generator
+    std::vector<double> estimateVec(numThreads, 0);  // vector of zeros to hold estimates of pi
+    //#pragma omp parallel proc_bind(close) num_threads(numThreads)
+    #pragma omp parallel for num_threads(numThreads) private(i,j,threadNum,seed,x,y,numHits,piEstimate)
     for (i = 0; i < numThreads; ++i) {  // run one simulation on each thread
       threadNum = omp_get_thread_num();  // gets number of thread
       seed = threadNum;  // sets different seed for each thread
-      insideCircle = 0;  // resets number of hits
+      numHits = 0;  // resets number of hits
       for (j = 0; j < numTrials; ++j) {
-        randomX = rand_r(&seed) / (double)RAND_MAX;  // generate random x coordinate
-        randomY = rand_r(&seed) / (double)RAND_MAX;  // generate random y coordinate
-        if (randomX * randomX + randomY * randomY <= 1) {  // check if inside quarter circle
-          ++insideCircle;  // +1 hit inside circle
+        x = rand_r(&seed) / (double)RAND_MAX;  // generate random x coordinate
+        y = rand_r(&seed) / (double)RAND_MAX;  // generate random y coordinate
+        if (x * x + y * y <= 1) {  // check if inside quarter circle
+          ++numHits;  // +1 hit inside circle
         }
       }
-      quarterCircleArea = insideCircle / (double)numTrials;  // estimates area with probability
-      piEstimate = quarterCircleArea * 4;  // estimates value of pi
+      piEstimate = numHits / (double)numTrials * 4;  // estimates value of pi
       estimateVec[threadNum] = piEstimate;  // save estimate to estimateVec
     }
-  double mean = 0;  // mean of estimates
-  for (int a = 0; a < numThreads; ++a) {
+    double mean = 0;  // mean of estimates
+    for (int a = 0; a < numThreads; ++a) {
       mean += estimateVec[a] / numThreads;
+    }
+    auto end = std::chrono::steady_clock::now();  // gets time at end of program
+    std::chrono::duration<double> execTime = end - start;  // calculates execution time
+    std::ofstream resultFile("OMPweakScaling.csv", std::ios::app);  // opens file to append results
+    resultFile << mean << ", " << numTrials << ", " << numThreads << ", " << execTime.count() << std::endl;  // write results to file
   }
-  auto end = std::chrono::steady_clock::now();  // gets time at end of program
-  std::chrono::duration<double> execTime = end - start;  // calculates execution time
-  std::ofstream resultFile("OMPweakScaleResults.csv", std::ios::app);  // opens file to append results
-  resultFile << numTrials << ", " << numThreads << ", " << mean << ", " << execTime << std::endl;  // write results to file
   return 0;
 }

@@ -17,15 +17,15 @@ int main()
   for (int j = 1; j < 17; ++j) {
   auto start = std::chrono::steady_clock::now();  // get time at beginning of program
   int numThreads = j;  // number of threads for parallel section
-  unsigned long long numTrials = 100000000;  // number of trials
+  unsigned long long numTrials = 10000000000;  // number of trials
   unsigned int seed = time(0);  // initialize seed for random number generator
   double x;  // random x coordinates
   double y;  // random y coordinates
   unsigned long long numHits = 0;  // number of hits inside quarter circle
   unsigned long long i;  // for loop counter
   //GOMP_AFFINITY = 0:numThreads;  // assigns threads to specific processors
-  #pragma omp parallel proc_bind(close) num_threads(numThreads)
-  #pragma omp for private(x,y) reduction(+:numHits)
+  //#pragma omp parallel proc_bind(close) num_threads(numThreads)
+  #pragma omp parallel for num_threads(numThreads) private(x,y) reduction(+:numHits)
   for (i = 0; i < numTrials; ++i) {
     x = rand_r(&seed) / (double)RAND_MAX;  // generate random x coordinate
     y = rand_r(&seed) / (double)RAND_MAX;  // generate random y coordinate
