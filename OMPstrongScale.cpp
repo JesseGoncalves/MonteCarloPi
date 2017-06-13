@@ -31,8 +31,6 @@ int main()
       }
       numHits = 0;  // reset number of hits
       auto start = std::chrono::steady_clock::now();  // get time at beginning of program
-      //GOMP_AFFINITY = 0:numThreads;  // assigns threads to specific processors
-      //#pragma omp parallel proc_bind(close) num_threads(numThreads)
       #pragma omp parallel for num_threads(numThreads) reduction(+:numHits)
       for (j = 0; j < numTrials; ++j) {
         if (randomXvec[j] * randomXvec[j] + randomYvec[j] * randomYvec[j] <= 1) {

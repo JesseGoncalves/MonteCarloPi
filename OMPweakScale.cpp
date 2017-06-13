@@ -51,7 +51,7 @@ int main()
       }
       auto end = std::chrono::steady_clock::now();  // gets time at end of program
       std::chrono::duration<double> execTime = end - start;  // calculates execution time
-      std::ofstream resultFile("OMPweakScaling2.csv", std::ios::app);  // opens file to append results
+      std::ofstream resultFile("OMPweakScaling.csv", std::ios::app);  // opens file to append results
       resultFile << mean << ", " << numTrials << ", " << numThreads << ", " << execTime.count() << std::endl;  // write results to file
     }
   }
