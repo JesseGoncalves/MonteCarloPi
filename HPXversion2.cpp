@@ -6,11 +6,11 @@
 #include <random>
 #include <thread>
 
-#include <hpx/hpx_init.hpp>
+#include <hpx/hpx_main.hpp>
 #include <hpx/hpx.hpp>
 #include <hpx/include/parallel_for_loop.hpp>
 
-double rand01()
+double rand01()  // generates a random double between 0 and 1
 {
   auto seed = std::chrono::steady_clock::now().time_since_epoch().count();
 
@@ -21,10 +21,8 @@ double rand01()
   return distribution(generator);
 }
 
-double trials()
-{
-  static int numTrials = 1000;  // number of trials per thread
-  
+double trials(int numTrials)  // calculates estimate of pi
+{ 
   int numHits = 0;  // number of hits inside circle 
 
   for (int i = 0; i < numTrials; ++i) {
@@ -38,27 +36,28 @@ double trials()
     }
  
   }
-  
+
   return 4 * numHits / (double) numTrials;  // return estimate of pi
 }
 
-void calculate_pi()
+//HPX_PLAIN_ACTION(trials, runTrials);
+
+int main(int argc, char* argv[])
 {
-  static int numTrials = 1000;  // number of trials per thread
+  static int numTrials = 1000;  // number of trials to execute on each thread
 
-  static int numThreads = 1000;  // number of threads to be executed
+  static int numThreads = 100000;  // number of threads to be executed
 
-  double estimate = 0;  // estimate of pi
+  double piEstimate = 0;  // estimate of pi
 
   auto start = std::chrono::steady_clock::now();  // time at beginning of execution
- 
-  for_loop(par, 0, numThreads, reduction_plus(estimate), [&](int j, double estimate) {
 
-    estimate = hpx::async(trials);  // return estimate of pi from each thread 
+  hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [](int j, double& piEstimate) {
 
-  }
+    piEstimate += trials(numTrials) / numThreads;  // sums up estimates on all threads
+    //hpx::async(runTrials, hpx::find_here(), );  // return estimate of pi from each thread 
 
-  double piEstimate = estimate / numThreads;  // calculate overall estimate of pi
+  });
 
   auto end = std::chrono::steady_clock::now();  // time at end of execution
 
@@ -67,5 +66,7 @@ void calculate_pi()
   std::ofstream resultFile("HPXdata.csv", std::ios::out | std::ios::app);  // write results to .csv file
 
   resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << execTime.count() << std::endl;
+
+  return 0;
 }
 
