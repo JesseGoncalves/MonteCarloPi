@@ -9,7 +9,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/build/hpx_build_Release/lib/pkgcon
 
 for i in {1..16}
 do
-  ./hpxp -t $i  #run code for different numbers of processors
+  ./../executables/hpxp -t $i  #run code for different numbers of processors
 done
 
-mv HPXparData.csv ../data
+mv ../executables/HPXparData.csv ../data

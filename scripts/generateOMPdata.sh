@@ -3,11 +3,11 @@
 OMP_PLACES=cores
 OMP_PROC_BIND=close
 
-g++ ../open_mp_code/OMPstrongScale.cpp -o ompStrong -fopenmp -std=c++11
-g++ ../open_mp_code/OMPweakScale.cpp -o ompWeak -fopenmp -std=c++11
+g++ ../open_mp_code/OMPstrongScale.cpp -o ../executables/ompStrong -fopenmp -std=c++11
+g++ ../open_mp_code/OMPweakScale.cpp -o ../executables/ompWeak -fopenmp -std=c++11
 
-./ompStrong
-./ompWeak
+./../executables/ompStrong
+./../executables/ompWeak
 
-mv OMPstrongScaling.csv ../data
-mv OMPweakScaling.csv ../data
+mv ../executables/OMPstrongScaling.csv ../data
+mv ../executables/OMPweakScaling.csv ../data
