@@ -29,11 +29,11 @@ cd ${BUILD_DIR} || {
     exit
 }
 
-cmake \
+cmake ../hpx_code \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     -DCMAKE_PREFIX_PATH=${HOME}/work/local_install_${BUILD_TYPE} \
     -DCMAKE_C_COMPILER=/opt/mn/gcc/6.3.0/bin/gcc \
     -DCMAKE_CXX_COMPILER=/opt/mn/gcc/6.3.0/bin/g++ \
     ${REPO_PATH}
 
-make HPXversion1
+make HPXparallel
