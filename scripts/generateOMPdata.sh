@@ -9,5 +9,5 @@ g++ $HOME/repos/MonteCarloPi/open_mp_code/OMPweakScale.cpp -o $HOME/repos/MonteC
 srun -p marvin -N $i ./$HOME/repos/MonteCarloPi/executables/ompStrong
 srun -p marvin -N $i ./$HOME/repos/MonteCarloPi/executables/ompWeak
 
-mv $HOME/repos/MonteCarloPi/executables/OMPstrongScaling.csv $HOME/repos/MonteCarloPi/data
-mv $HOME/repos/MonteCarloPi/executables/OMPweakScaling.csv $HOME/repos/MonteCarloPi/data
+cat OMPstrongScaling.csv >> $HOME/repos/MonteCarloPi/data/OMPstrongScaling.csv
+cat OMPweakScaling.csv >> $HOME/repos/MonteCarloPi/data/OMPweakScaling.csv

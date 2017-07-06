@@ -49,7 +49,7 @@ int hpx_main(boost::program_options::variables_map& vm)
 
   boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
 
-  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores
+  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores to execute on
 
   trial_action runTrials;  // call action
 

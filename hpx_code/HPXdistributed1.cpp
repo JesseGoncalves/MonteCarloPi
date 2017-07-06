@@ -10,7 +10,7 @@
 #include <hpx/hpx.hpp>
 #include <hpx/include/parallel_for_loop.hpp>
 
-double trials(int numTrials);  // forward declaration of trials function
+double trials(boost::uint64_t numTrials);  // forward declaration of trials function
 HPX_PLAIN_ACTION(trials, trial_action);  // wrap function as action
 
 double rand01()  // generates a random double between 0 and 1
@@ -43,13 +43,13 @@ double trials(boost::uint64_t numTrials)  // calculates estimate of pi
   return 4 * numHits / (double) numTrials;  // return estimate of pi
 }
 
-int hpx_main(boost::program_options::variable_map& vm)
+int hpx_main(boost::program_options::variables_map& vm)
 {
   boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials to execute on each thread
 
   boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
 
-  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores
+  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores to execute on
 
   trial_action runTrials;  // call action
 
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 
     ("cores", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of cores")
 
-    ("threads", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of threads")
+    ("threads", boost::program_options::value<boost::uint64_t>()->default_value(100000), "number of threads")
 
     ("trials", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of trials");
 

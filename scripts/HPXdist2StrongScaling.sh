@@ -7,9 +7,9 @@ export PKG_CONFIG_PATH=$HOME/build/hpx_build_Release/lib/pkgconfig
 
 c++ -o $HOME/repos/MonteCarloPi/executables/hpxd2 $HOME/repos/MonteCarloPi/hpx_code/HPXdistributed2.cpp `pkg-config --cflags --libs hpx_application` -DHPX_APPLICATION_NAME=hpxd2
 
-for i in {1..14}
+for i in {1..8}
 do
-  $HOME/repos/MonteCarloPi/executables/hpxd2 -t $i --cores $i --threads 100000 --trials 1000  #run code for different numbers of processors
+  srun -p marvin -N 1 $HOME/repos/MonteCarloPi/executables/hpxd2 -t $i --cores $i --threads 100000 --trials 1000  #run code for different numbers of processors
 done
 
-mv $HOME/repos/MonteCarloPi/executables/HPXdist2Data.csv $HOME/repos/MonteCarloPi/data
+cat HPXdist2Data.csv >> $HOME/repos/MonteCarloPi/data/HPXdist2Data.csv
