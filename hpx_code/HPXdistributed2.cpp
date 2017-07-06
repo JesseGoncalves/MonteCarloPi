@@ -10,6 +10,9 @@
 #include <hpx/hpx.hpp>
 #include <hpx/include/parallel_for_loop.hpp>
 
+double trials(boost::uint64_t numTrials);  // forward declaration of trials function
+HPX_PLAIN_ACTION(trials, trial_action);  // wrap function as action
+
 double rand01()  // generates a random double between 0 and 1
 {
   auto seed = std::chrono::steady_clock::now().time_since_epoch().count();
@@ -40,32 +43,35 @@ double trials(boost::uint64_t numTrials)  // calculates estimate of pi
   return 4 * numHits / (double) numTrials;  // return estimate of pi
 }
 
-
 int hpx_main(boost::program_options::variables_map& vm)
 {
   boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials to execute on each thread
 
-  boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();;  // number of threads to be executed
+  boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
 
-  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores to execute on
+  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores
 
-  for (int j = 0; j < 10; ++j) {  // repeat 10 times
+  trial_action runTrials;  // call action
+
+  for (int j = 0; j < 10; ++j) {
 
     double piEstimate = 0;  // estimate of pi
 
     auto start = std::chrono::steady_clock::now();  // time at beginning of execution
 
-    hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [&](int k, double& piEstimate) {
+    hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [&](boost::uint64_t k, double& piEstimate) {
 
-      piEstimate += trials(numTrials) / numThreads;  // sums up estimates on all threads
+      hpx::future<double> estimate = hpx::async(runTrials, hpx::find_here(), numTrials);  // estimate of pi from each thread
+
+      piEstimate += estimate.get() / numThreads;  // sum estimates from each thread divided by number of threads
 
     });
 
     auto end = std::chrono::steady_clock::now();  // time at end of execution
- 
+
     std::chrono::duration<double> execTime = end - start;  // execution time
 
-    std::ofstream resultFile("HPXparData.csv", std::ios::out | std::ios::app);  // write results to .csv file
+    std::ofstream resultFile("HPXdist2Data.csv", std::ios::out | std::ios::app);  // write results to .csv file
 
     resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << numCores << ", " << execTime.count() << std::endl;
 
@@ -79,11 +85,12 @@ int main(int argc, char* argv[])
 
   desc.add_options()
 
-    ("trials", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of trials per thread")
-  
-    ("threads", boost::program_options::value<boost::uint64_t>()->default_value(100000), "number of threads")
+    ("cores", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of cores")
 
-    ("cores", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of cores");
+    ("threads", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of threads")
+
+    ("trials", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of trials");
 
   return hpx::init(desc, argc, argv);
 }
+

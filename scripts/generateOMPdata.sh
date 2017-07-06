@@ -3,11 +3,11 @@
 OMP_PLACES=cores
 OMP_PROC_BIND=close
 
-g++ ../open_mp_code/OMPstrongScale.cpp -o ../executables/ompStrong -fopenmp -std=c++11
-g++ ../open_mp_code/OMPweakScale.cpp -o ../executables/ompWeak -fopenmp -std=c++11
+g++ $HOME/repos/MonteCarloPi/open_mp_code/OMPstrongScale.cpp -o $HOME/repos/MonteCarloPi/executables/ompStrong -fopenmp -std=c++11
+g++ $HOME/repos/MonteCarloPi/open_mp_code/OMPweakScale.cpp -o $HOME/repos/MonteCarloPi/executables/ompWeak -fopenmp -std=c++11
 
-./../executables/ompStrong
-./../executables/ompWeak
+srun -p marvin -N $i ./$HOME/repos/MonteCarloPi/executables/ompStrong
+srun -p marvin -N $i ./$HOME/repos/MonteCarloPi/executables/ompWeak
 
-mv ../executables/OMPstrongScaling.csv ../data
-mv ../executables/OMPweakScaling.csv ../data
+mv $HOME/repos/MonteCarloPi/executables/OMPstrongScaling.csv $HOME/repos/MonteCarloPi/data
+mv $HOME/repos/MonteCarloPi/executables/OMPweakScaling.csv $HOME/repos/MonteCarloPi/data

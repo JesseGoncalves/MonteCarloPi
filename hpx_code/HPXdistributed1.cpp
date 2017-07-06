@@ -6,7 +6,7 @@
 #include <random>
 #include <thread>
 
-#include <hpx/hpx_main.hpp>
+#include <hpx/hpx_init.hpp>
 #include <hpx/hpx.hpp>
 #include <hpx/include/parallel_for_loop.hpp>
 
@@ -24,11 +24,11 @@ double rand01()  // generates a random double between 0 and 1
   return distribution(generator);
 }
 
-double trials(int numTrials)  // calculates estimate of pi
+double trials(boost::uint64_t numTrials)  // calculates estimate of pi
 { 
-  int numHits = 0;  // number of hits inside circle 
+  boost::uint64_t numHits = 0;  // number of hits inside circle 
 
-  for (int i = 0; i < numTrials; ++i) {
+  for (boost::uint64_t i = 0; i < numTrials; ++i) {
 
     double x = rand01(); double y = rand01();  // generate random x and y coordinates
 
@@ -43,21 +43,23 @@ double trials(int numTrials)  // calculates estimate of pi
   return 4 * numHits / (double) numTrials;  // return estimate of pi
 }
 
-int main(int argc, char* argv[])
+int hpx_main(boost::program_options::variable_map& vm)
 {
-  for (int j = 0; j < 10; ++j) {
+  boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials to execute on each thread
 
-    static int numTrials = 1000;  // number of trials to execute on each thread
+  boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
 
-    static int numThreads = 100000;  // number of threads to be executed
+  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores
+
+  trial_action runTrials;  // call action
+
+  for (int j = 0; j < 10; ++j) {  // repeat 10 times
 
     double piEstimate = 0;  // estimate of pi
 
-    trial_action runTrials;  // call action
-
     auto start = std::chrono::steady_clock::now();  // time at beginning of execution
 
-    hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [&](int k, double& piEstimate) {
+    hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [&](boost::uint64_t k, double& piEstimate) {
 
       hpx::future<double> estimate = hpx::async(runTrials, hpx::find_here(), numTrials);  // estimate of pi from each thread
 
@@ -71,9 +73,24 @@ int main(int argc, char* argv[])
 
     std::ofstream resultFile("HPXdistData.csv", std::ios::out | std::ios::app);  // write results to .csv file
 
-    resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << execTime.count() << std::endl;
+    resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << numCores << ", " << execTime.count() << std::endl;
 
   }
-  return 0;
+  return hpx::finalize();
+}
+
+int main(int argc, char* argv[])
+{
+  boost::program_options::options_description desc("Allowed options");
+
+  desc.add_options()
+
+    ("cores", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of cores")
+
+    ("threads", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of threads")
+
+    ("trials", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of trials");
+
+  return hpx::init(desc, argc, argv);
 }
 
