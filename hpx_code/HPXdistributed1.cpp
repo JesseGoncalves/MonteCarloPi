@@ -49,7 +49,7 @@ int hpx_main(boost::program_options::variables_map& vm)
 
   boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
 
-  boost::uint64_t numCores = vm["cores"].as<boost::uint64_t>();  // number of cores to execute on
+  boost::uint64_t numNodes = vm["nodes"].as<boost::uint64_t>();  // number of nodes to execute on
 
   trial_action runTrials;  // call action
 
@@ -73,7 +73,7 @@ int hpx_main(boost::program_options::variables_map& vm)
 
     std::ofstream resultFile("HPXdistData.csv", std::ios::out | std::ios::app);  // write results to .csv file
 
-    resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << numCores << ", " << execTime.count() << std::endl;
+    resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << numNodes << ", " << execTime.count() << std::endl;
 
   }
   return hpx::finalize();
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 
   desc.add_options()
 
-    ("cores", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of cores")
+    ("nodes", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of nodes")
 
     ("threads", boost::program_options::value<boost::uint64_t>()->default_value(100000), "number of threads")
 
