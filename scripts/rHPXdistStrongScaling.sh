@@ -10,7 +10,7 @@ c++ -o $HOME/repos/MonteCarloPi/executables/hpxd $HOME/repos/MonteCarloPi/hpx_co
 for i in {1..8}
 do
   N=$((4 * $i))
-  srun -p marv_noht -N $i $HOME/repos/MonteCarloPi/executables/hpxd -t $N --nodes $i --threads 100000 --trials 1000  #run code on different numbers of numbers
+  srun -p marv_noht -N $i $HOME/repos/MonteCarloPi/executables/hpxd -t $N --hpx:run-hpx-main --hpx:numa-sensitive --nodes $i --threads 100000 --trials 1000  #run code on different numbers of numbers
 done
 
 echo '                                 ' >> $HOME/repos/MonteCarloPi/data/HPXdistData.csv

@@ -9,7 +9,7 @@ c++ -o $HOME/repos/MonteCarloPi/executables/hpxp $HOME/repos/MonteCarloPi/hpx_co
 
 for i in {1..32}
 do
-  srun -p trillian -N 1 $HOME/repos/MonteCarloPi/executables/hpxp -t $i --cores $i --trials 1000 --threads 100000  #run code for different numbers of processor
+  srun -p trillian -N 1 $HOME/repos/MonteCarloPi/executables/hpxp -t $i --hpx:numa-sensitive --cores $i --trials 1000 --threads 100000  #run code for different numbers of processor
 done
 
 echo '                                 ' >> $HOME/repos/MonteCarloPi/data/HPXparData.csv
