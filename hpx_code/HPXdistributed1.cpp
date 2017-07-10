@@ -45,9 +45,9 @@ double trials(boost::uint64_t numTrials)  // calculates estimate of pi
 
 int hpx_main(boost::program_options::variables_map& vm)
 {
-  boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials to execute on each thread
+  boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials per packet
 
-  boost::uint64_t numThreads = vm["threads"].as<boost::uint64_t>();  // number of threads to be executed
+  boost::uint64_t numPackets = vm["packets"].as<boost::uint64_t>();  // number of packets to be executed
 
   boost::uint64_t numNodes = vm["nodes"].as<boost::uint64_t>();  // number of nodes to execute on
 
@@ -59,11 +59,11 @@ int hpx_main(boost::program_options::variables_map& vm)
 
     auto start = std::chrono::steady_clock::now();  // time at beginning of execution
 
-    hpx::parallel::for_loop(hpx::parallel::par, 0, numThreads, hpx::parallel::reduction_plus(piEstimate), [&](boost::uint64_t k, double& piEstimate) {
+    hpx::parallel::for_loop(hpx::parallel::par, 0, numPackets, hpx::parallel::reduction_plus(piEstimate), [&](boost::uint64_t k, double& piEstimate) {
 
       hpx::future<double> estimate = hpx::async(runTrials, hpx::find_here(), numTrials);  // estimate of pi from each thread
 
-      piEstimate += estimate.get() / numThreads;  // sum estimates from each thread divided by number of threads
+      piEstimate += estimate.get() / numPackets;  // sum estimates from each thread divided by number of threads
 
     });
 
@@ -73,7 +73,7 @@ int hpx_main(boost::program_options::variables_map& vm)
 
     std::ofstream resultFile("HPXdistData.csv", std::ios::out | std::ios::app);  // write results to .csv file
 
-    resultFile << piEstimate << ", " << numTrials << ", " << numThreads << ", " << numNodes << ", " << execTime.count() << std::endl;
+    resultFile << piEstimate << ", " << numTrials << ", " << numPackets << ", " << numNodes << ", " << execTime.count() << std::endl;
 
   }
   return hpx::finalize();
