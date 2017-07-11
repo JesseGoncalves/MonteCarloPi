@@ -41,9 +41,9 @@ int main(int argc, char* argv[])
 
   int i, j, l; unsigned long long k;  // for loop counters
 
-  for (i = 0; i < 10; ++i) {  // repeat 10 times at each number of threads
+  std::vector<double> estimateVec(numCores);  // vector for estimates of pi
 
-    std::vector<double> estimateVec(numCores);  // vector for estimates of pi
+  for (i = 0; i < 10; ++i) {  // repeat 10 times
 
     meanEstimate = 0;  // reset mean estimate
 
@@ -90,5 +90,4 @@ int main(int argc, char* argv[])
   }
 
   return 0;
-
 } 

@@ -7,7 +7,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/build/hpx_build_Release/lib/pkgcon
 
 c++ -o $HOME/repos/MonteCarloPi/executables/hpxd $HOME/repos/MonteCarloPi/hpx_code/HPXdistributed1.cpp `pkg-config --cflags --libs hpx_application` -DHPX_APPLICATION_NAME=hpxd
 
-for i in 1
+for i in {1..8}
 do
   N=$((4 * $i))
   srun -p marv_ht -N $i $HOME/repos/MonteCarloPi/executables/hpxd -t $N --hpx:run-hpx-main --hpx:numa-sensitive --nodes $i --threads 10000 --trials 1000  #run code on different numbers of numbers

@@ -7,13 +7,12 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/build/hpx_build_Release/lib/pkgcon
 
 c++ -o $HOME/repos/MonteCarloPi/executables/hpxp $HOME/repos/MonteCarloPi/hpx_code/HPXparallel1.cpp `pkg-config --cflags --libs hpx_application` -DHPX_APPLICATION_NAME=hpxp
 
-for i in {1..32}
+for i in {1..8}
 do
-  srun -p trillian -N 1 $HOME/repos/MonteCarloPi/executables/hpxp -t $i --hpx:numa-sensitive --cores $i --trials 1000 --threads 100000  #run code for different numbers of processor
+  T=$((2 * $i))
+  srun -p marvin -N 1 $HOME/repos/MonteCarloPi/executables/hpxp -t $T --hpx:numa-sensitive --cores $i --trials 1000 --packets 100000  #run code for different numbers of processor
 done
 
-echo '                                 ' >> $HOME/repos/MonteCarloPi/data/HPXparData.csv
+now=$(date +"%Y-%m-%d-%S")
 
-cat HPXparData.csv >> $HOME/repos/MonteCarloPi/data/HPXparData.csv
-
-rm HPXparData.csv
+mv HPXparData.csv $HOME/repos/MonteCarloPi/data/HPXparData_$now.csv

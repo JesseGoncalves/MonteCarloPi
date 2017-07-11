@@ -14,8 +14,6 @@ do
   $HOME/repos/MonteCarloPi/executables/hpxp -t $T --cores $i --trials 1000 --packets 100000  #run code for different numbers of processor
 done
 
-echo '                                 ' >> $HOME/repos/MonteCarloPi/data/HPXparData.csv
+now=$(date +"%Y-%m-%d-%S")
 
-cat HPXparData.csv >> $HOME/repos/MonteCarloPi/data/HPXparData.csv
-
-rm HPXparData.csv
+mv HPXparData.csv $HOME/repos/MonteCarloPi/data/HPXparData_$now.csv

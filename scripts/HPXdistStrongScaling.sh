@@ -13,8 +13,6 @@ do
   $HOME/repos/MonteCarloPi/executables/hpxd -t $N --nodes $i --packets 100000 --trials 1000  #run code on different numbers of nodes
 done
 
-echo '                                 ' >> $HOME/repos/MonteCarloPi/data/HPXdistData.csv
+now=$(date +"%Y-%m-%d-%S")
 
-cat HPXdistData.csv >> $HOME/repos/MonteCarloPi/data/HPXdistData.csv
-
-rm HPXdistData.csv
+mv HPXdistData.csv $HOME/repos/MonteCarloPi/data/HPXdistData_$now.csv
