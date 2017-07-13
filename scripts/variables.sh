@@ -1,6 +1,5 @@
-#!/bin/bash
-
-a=23              # Simple case
-echo $a
-b=$(($a * $a))
-echo $b
+for i in 10 100 1000 10000
+do
+  J=$((10000 / $i))
+  echo $J
+done
