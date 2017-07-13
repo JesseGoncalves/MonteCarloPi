@@ -7,10 +7,10 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/build/hpx_build_Release/lib/pkgcon
 
 c++ -o $HOME/repos/MonteCarloPi/executables/hpxp $HOME/repos/MonteCarloPi/hpx_code/HPXparallel1.cpp `pkg-config --cflags --libs hpx_application` -DHPX_APPLICATION_NAME=hpxp
 
-for j in 10 100 1000 10000 100000 1000000 10000000
+for j in 1
 do
   P=$((100000000 / $j))
-  srun -p carson -N 1 --time=2:00:00 $HOME/repos/MonteCarloPi/executables/hpxp -t 10 --hpx:numa-sensitive --cores 10 --trials $j --packets $P  #run code for different numbers of processor
+  srun -p carson -N 1 --time=4:00:00 $HOME/repos/MonteCarloPi/executables/hpxp -t 10 --hpx:numa-sensitive --cores 10 --trials $j --packets $P  #run code for different numbers of processor
 done
 
 now=$(date +"%Y-%m-%d-%S")

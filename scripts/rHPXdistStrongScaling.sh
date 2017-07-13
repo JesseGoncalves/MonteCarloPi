@@ -10,7 +10,7 @@ c++ -o $HOME/repos/MonteCarloPi/executables/hpxd $HOME/repos/MonteCarloPi/hpx_co
 for i in {1..8}
 do
   N=$((8 * $i))
-  srun -p trillian -N 1 $HOME/repos/MonteCarloPi/executables/hpxd -t $N --hpx:run-hpx-main --hpx:numa-sensitive --nodes $i --packets 1000 --trials 1000  #run code on different numbers of numbers
+  srun -p trillian -N 1 --time=4:00:00 $HOME/repos/MonteCarloPi/executables/hpxd -t $N --hpx:run-hpx-main --hpx:numa-sensitive --nodes $i --packets 1000 --trials 100000  #run code on different numbers of numbers
 done
 
 now=$(date +"%Y-%m-%d-%S")
