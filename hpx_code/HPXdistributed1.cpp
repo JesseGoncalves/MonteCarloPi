@@ -1,3 +1,8 @@
+#include <hpx/hpx_init.hpp>
+#include <hpx/hpx.hpp>
+#include <hpx/lcos/gather.hpp>
+#include <hpx/include/parallel_for_loop.hpp>
+
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -6,18 +11,13 @@
 #include <random>
 #include <thread>
 
-#include <hpx/hpx_init.hpp>
-#include <hpx/hpx.hpp>
-#include <hpx/lcos/gather.hpp>
-#include <hpx/include/parallel_for_loop.hpp>
-
 double trials(boost::uint64_t numTrials, boost::uint64_t packetsPerNode);  // forward declaration of trials function
 HPX_PLAIN_ACTION(trials, trial_action);  // wrap function as action
-char const* gather_basename = "/HPXdistStrongScaling.cpp/gather/";  // basename for gather operation
+char const* gather_basename = "/HPXdistStrongScaling/gather/";  // basename for gather operation
 
 double rand01()  // generates a random double between 0 and 1
 {
-  auto seed = std::chrono::steady_clock::now().time_since_epoch().count() + hpx::get_locality_id();
+  unsigned int seed = std::chrono::steady_clock::now().time_since_epoch().count() + hpx::get_locality_id();
 
   static thread_local std::mt19937 generator(seed);
 
@@ -111,9 +111,9 @@ int main(int argc, char* argv[])
 
     ("nodes", boost::program_options::value<boost::uint64_t>()->default_value(1), "number of nodes")
 
-    ("packets", boost::program_options::value<boost::uint64_t>()->default_value(100000), "number of packets")
+    ("packets", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of packets")
 
-    ("trials", boost::program_options::value<boost::uint64_t>()->default_value(1000), "number of trials");
+    ("trials", boost::program_options::value<boost::uint64_t>()->default_value(100000), "number of trials");
 
   return hpx::init(desc, argc, argv);
 }
