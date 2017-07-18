@@ -53,6 +53,8 @@ double trials(boost::uint64_t numTrials, boost::uint64_t packetsPerNode)  // cal
   return piEstimate;  // return estimate of pi
 }
 
+HPX_REGISTER_GATHER(double, monte_carlo_gather);
+
 int hpx_main(boost::program_options::variables_map& vm)
 {
   boost::uint64_t numTrials = vm["trials"].as<boost::uint64_t>();  // number of trials per packet
@@ -85,7 +87,7 @@ int hpx_main(boost::program_options::variables_map& vm)
 
       for (boost::uint64_t l = 0; l < numNodes; ++l) {
 
-        result += resultVec[l];  // calculate overall estimate
+        result += resultVec[l] / numNodes;  // calculate overall estimate
 
       }
 

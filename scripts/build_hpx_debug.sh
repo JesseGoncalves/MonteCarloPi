@@ -6,7 +6,7 @@ BUILD_PATH=$HOME/build/hpx_build_$BUILDTYPE
 INSTALL_PATH=$HOME/local_install_$BUILDTYPE
 REPO_PATH=$HOME/hpx
 
-module load gcc/6.3.0 cmake/3.6.2 hwloc/1.11.3 boost/1.63.0-gcc6.3.0 openmpi/1.10.5-gcc6.3.0 
+module load gcc/6.3.0 cmake/3.8.1 hwloc/1.11.3 boost/1.63.0-gcc6.3.0 openmpi/1.10.5-gcc6.3.0 
 
 NUM_BUILDCORES=20
 
