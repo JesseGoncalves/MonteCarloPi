@@ -87,9 +87,11 @@ int hpx_main(boost::program_options::variables_map& vm)
 
       for (boost::uint64_t l = 0; l < numNodes; ++l) {
 
-        result += resultVec[l] / numNodes;  // calculate overall estimate
+        result += resultVec[l];  // calculate overall estimate
 
       }
+
+      result = result / numNodes; 
 
       auto end = std::chrono::steady_clock::now();  // time at end of execution
 
