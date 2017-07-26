@@ -19,9 +19,9 @@ double rand01()
 
 int main()
 {
-  static unsigned long long numTrials = 10e7;  // number of trials for monte carlo simulation
+  static unsigned long long numTrials = 10e8;  // number of trials for monte carlo simulation
 
-  int maxThreads = 4;  // maximum number of threads to run concurrently
+  int maxThreads = omp_get_max_threads();  // maximum number of threads to run concurrently
 
   int numThreads;  // number of threads for parallel section
 
